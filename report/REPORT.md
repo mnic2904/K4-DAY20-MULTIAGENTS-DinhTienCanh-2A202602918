@@ -14,8 +14,8 @@
 ## 2. Giả thuyết (commit TRƯỚC tag `freeze`, Phần 4.0)
 
 - H1 (subagents so với baseline): Baseline được dự đoán đạt điểm đánh giá cao hơn hoặc bằng subagents. Trên tập học, điểm trung bình của subagents giảm từ 0,445 xuống 0,408 trong khi tổng token tăng 89,5% (112.738 lên 213.631); hai lần giao việc đều dùng `general-purpose`, còn ba subagent tự định nghĩa không được gọi. Kết quả `logs-learn` còn giảm từ 1/9 xuống 0/9 vì tác tử chính phát hiện tệp rỗng nhưng không sửa, nên chưa có bằng chứng rằng chi phí giao việc tạo ra lợi ích có thể chuyển giao.
-- H2 (skills-auto so với baseline): Skills-auto được dự đoán xấp xỉ baseline, không phải điều kiện tốt nhất. Cả ba lần chạy học đều có `skills_read = 0`; `code-learn` và `data-learn` giữ nguyên điểm, còn mức tăng 1/9 lên 6/9 của `logs-learn` không thể quy cho skill vì trace không đọc `SKILL.md`. Nếu hành vi chọn skill không đổi trên tập đánh giá, các quy tắc tự sinh dù hợp lệ cũng không tác động đến kết quả.
-- H3 (tác vụ học so với tác vụ đánh giá): Điểm trên tác vụ đánh giá được dự đoán thấp hơn hoặc biến động mạnh hơn điểm học ở cả ba điều kiện vì dữ liệu và quy ước mới tạo ra dịch chuyển phân phối. Baseline chủ yếu thất bại ở các check `rule_*`; subagents không cải thiện lỗi này; skill tự sinh có dấu hiệu bám các chi tiết học như `order_id`, `-999` và giữ bản ghi đầu tiên, đồng thời chưa được đọc. Do đó baseline được dự đoán có điểm trung bình đánh giá cao nhất, nhưng chênh lệch nhỏ và có thể bị nhiễu giữa các lần gọi model chi phối.
+- H2 (skills-auto so với baseline): Skills-auto được dự đoán xấp xỉ baseline, không phải điều kiện tốt nhất. Cả ba lần chạy học đều có `skills_read = 0`; `code-learn` và `data-learn` giữ nguyên điểm, còn mức tăng 1/9 lên 6/9 của `logs-learn` không thể quy cho skill vì trace không đọc `SKILL.md`. Dự đoán này cũng phù hợp với SkillsBench [1]: skill do con người tuyển chọn tăng pass rate trung bình 16,2 điểm phần trăm, nhưng skill tự sinh không có lợi ích trung bình. Nếu hành vi chọn skill không đổi trên tập đánh giá, các quy tắc tự sinh dù hợp lệ cũng không tác động đến kết quả.
+- H3 (tác vụ học so với tác vụ đánh giá): Điểm trên tác vụ đánh giá được dự đoán thấp hơn hoặc biến động mạnh hơn điểm học ở cả ba điều kiện vì dữ liệu và quy ước mới tạo ra dịch chuyển phân phối. Baseline chủ yếu thất bại ở các check `rule_*`; subagents không cải thiện lỗi này; skill tự sinh có dấu hiệu bám các chi tiết học như `order_id`, `-999` và giữ bản ghi đầu tiên, đồng thời chưa được đọc. SkillEvolBench [2] cũng cho thấy tác tử thường thích nghi cục bộ nhưng hiếm khi hình thành skill tái sử dụng bền vững; lợi ích trên acquisition/replay không ổn định dưới context shift và composition. Do đó baseline được dự đoán có điểm trung bình đánh giá cao nhất, nhưng chênh lệch nhỏ và có thể bị nhiễu giữa các lần gọi model chi phối.
 
 ## 3. Làm quen Deep Agents (Phần 0.3)
 
@@ -114,6 +114,11 @@ Không lần chạy chính thức nào có `error` hoặc `skills_modified = tru
 ## 10. Kết luận
 
 Baseline đạt điểm evaluation trung bình 0,40 với chi phí thấp nhất, skills-auto cũng đạt 0,40 nhưng tốn thêm 62,9% token, còn subagents chỉ đạt 0,29 và tốn thêm 76,6%. Không có lần chạy nào đọc skill và không điều kiện nào đạt house rule evaluation, nên chưa có bằng chứng rằng skill tự sinh hoặc đa tác tử cải thiện khả năng chuyển giao. Các subagent tự định nghĩa không được chọn, còn hai lần dùng `general-purpose` không cải thiện điểm tổng thể. Kết quả giữa hai lượt skills-auto học biến động mạnh, vì vậy các chênh lệch nhỏ không đáng tin khi chỉ chạy một lần. Bước tiếp theo nên cải thiện description/cơ chế buộc đọc skill rồi chạy lặp mỗi cấu hình nhiều lần để tách hiệu quả skill khỏi nhiễu.
+
+## Tài liệu tham khảo
+
+1. Li, X. và cộng sự (2026), “SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks”, arXiv:2602.12670. <https://arxiv.org/abs/2602.12670>
+2. Lei, Y. và cộng sự (2026), “SkillEvolBench: Benchmarking the Evolution from Episodic Experience to Procedural Skills”, arXiv:2605.24117. <https://arxiv.org/abs/2605.24117>
 
 ## Phụ lục
 
