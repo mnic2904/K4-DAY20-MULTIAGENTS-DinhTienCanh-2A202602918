@@ -55,7 +55,7 @@ def hash_dir(path: Path) -> str:
     if path.exists():
         for f in sorted(path.rglob("*")):
             if f.is_file():
-                h.update(f.relative_to(path).as_posix().encode())
+                h.update(str(f.relative_to(path)).encode())
                 h.update(f.read_bytes())
     return h.hexdigest()
 
@@ -72,7 +72,7 @@ def hash_skills(skills_dir: Path) -> str:
         for skill in (p for p in skills_dir.iterdir() if (p / "SKILL.md").exists()):
             files += [f for f in skill.rglob("*") if f.is_file()]
     for f in sorted(files):
-        h.update(f.relative_to(skills_dir).as_posix().encode())
+        h.update(str(f.relative_to(skills_dir)).encode())
         h.update(f.read_bytes())
     return h.hexdigest()
 
