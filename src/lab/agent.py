@@ -104,7 +104,12 @@ def build_agent(sandbox: Path, mode: str = "single", use_skills: bool = False, m
             {**sub, "system_prompt": sub["system_prompt"] + " " + PATHS_NOTE}
             for sub in get_subagents()
         ]
-        prompt = prompt + SUBAGENTS_NOTE
+        prompt = prompt + SUBAGENTS_NOTE + (
+            " ROUTING IS REQUIRED: delegate Python package repair to `code-fixer`, structured CSV/JSON analysis "
+            "to `data-analyst`, and service-log parsing to `log-analyst` before doing the implementation yourself. "
+            "Do not use `general-purpose` when one of these specialists matches. After delegation, inspect the "
+            "created files and run an independent verification; repair or re-delegate if verification fails."
+        )
 
     if use_skills:
         kwargs["skills"] = ["/skills/"]                # đường dẫn ảo, tính từ root_dir của backend
